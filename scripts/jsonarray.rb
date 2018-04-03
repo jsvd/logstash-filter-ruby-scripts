@@ -10,10 +10,22 @@ def register(params)
 end
 
 def filter(event)
+  if event.get(@sourceField).nil?
+    event.tag("#{@sourceField}_not_found")
+    return [event]
+  end
   object = event.get(@sourceField)
   h = {}
   for thing in object
+    if event.get(@nameField).nil?
+      event.tag("#{@nameField}_not_found")
+      return [event]
+    end
     itemName = thing[@nameField]
+    if event.get(@valueField).nil?
+      event.tag("#{@valueField}_not_found")
+      return [event]
+    end
     itemValue = thing[@valueField]
     h[itemName] = itemValue
   end
